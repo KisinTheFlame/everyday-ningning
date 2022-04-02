@@ -32,7 +32,7 @@ ws.on("AT_MESSAGES", async event => {
         const {path, description} = await getRandomPhoto();
         await client.messageApi.postMessage(message.channel_id, {
             content: description,
-            image: "https://ning.kisin.tech/api/ningning-random",
+            image: path,
             msg_id: message.id
         });
         console.log(message.author.username + "得到了图片" + path);
