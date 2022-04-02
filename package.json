@@ -1,0 +1,20 @@
+{
+  "name": "everyday-ningning",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "author": "Kisin Wen",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "axios": "^0.26.1",
+    "node-cron": "^3.0.0",
+    "qq-guild-bot": "^2.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.12.0"
+  }
+}
