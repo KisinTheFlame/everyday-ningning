@@ -31,12 +31,15 @@ ws.on("AT_MESSAGES", async event => {
     const message = event.msg;
     if (message.content.indexOf("/来点宁宁") !== -1) {
         const {path, description} = await getRandomPhoto();
-        await client.messageApi.postMessage(message.channel_id, {
-            content: description,
-            image: path,
-            msg_id: message.id
-        });
-        console.log(message.author.username + "得到了图片" + path);
+        await client
+            .messageApi
+            .postMessage(message.channel_id, {
+                content: description,
+                image: path,
+                msg_id: message.id
+            })
+            .then(() => console.log("Success"))
+            .catch(reason => console.log(reason));
     }
 });
 
