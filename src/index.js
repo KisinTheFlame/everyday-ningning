@@ -27,6 +27,7 @@ async function getRandomPhoto() {
 }
 
 ws.on("AT_MESSAGES", async event => {
+    console.log(event);
     const message = event.msg;
     if (message.content.indexOf("/来点宁宁") !== -1) {
         const {path, description} = await getRandomPhoto();
