@@ -2,7 +2,7 @@ import {AvailableIntentsEventsEnum, createOpenAPI, createWebsocket, IMessage, Me
 import * as cron from "node-cron";
 import axios from "axios";
 import {environment} from "../config";
-import {atUser} from "./util";
+import {atUser, getRandomPhoto} from "./util";
 
 const backendPrefix = "https://ning.kisin.tech/api";
 axios.defaults.baseURL = backendPrefix;
@@ -19,22 +19,6 @@ const postChannelId = environment.postChannel;
 const client = createOpenAPI(config);
 const ws = createWebsocket(config);
 
-function getRandomPhoto() {
-    return axios
-        .post("/get-random-photo")
-        .then((response: { data: { filename: string, description: string, frequency: number } }) => {
-            const data = response.data;
-            const path = backendPrefix + "/ning/" + data.filename;
-            const description = data.description;
-            const frequency = data.frequency;
-            return {
-                path: path,
-                description: description,
-                frequency: frequency
-            };
-        });
-}
-
 interface ReplyOptions {
     onSuccess?: () => void,
     onFailure?: () => void,
@@ -47,9 +31,6 @@ function reply(
     message: MessageToCreate,
     options: ReplyOptions
 ) {
-    const onSuccess = options.onSuccess;
-    const onFailure = options.onFailure;
-    const shouldRetry = options.shouldRetry;
     const messageToCreateBase: MessageToCreate = {msg_id: userMessage.id};
     client
         .messageApi
@@ -58,22 +39,22 @@ function reply(
             Object.assign(message, messageToCreateBase),
         )
         .then(() => {
-            if (onSuccess !== undefined) {
-                onSuccess();
+            if (options.onSuccess !== undefined) {
+                options.onSuccess();
             }
         })
         .catch(reason => {
             console.log(reason);
-            if (onFailure !== undefined) {
-                onFailure();
+            if (options.onFailure !== undefined) {
+                options.onFailure();
             }
-            if (shouldRetry) {
+            if (options.shouldRetry) {
                 const timeToTry = options.timeToTry !== undefined ? options.timeToTry : environment.maxTimeToTry;
                 if (timeToTry > 0) {
                     reply(userMessage, message, {
-                        onSuccess: onSuccess,
-                        onFailure: onFailure,
-                        shouldRetry: shouldRetry,
+                        onSuccess: options.onSuccess,
+                        onFailure: options.onFailure,
+                        shouldRetry: options.shouldRetry,
                         timeToTry: timeToTry - 1
                     });
                 }

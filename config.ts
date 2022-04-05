@@ -2,6 +2,7 @@ export const environment: Environment = {
     appID: "101996873",
     token: "EzS8aRVNyGIXMJMEQNpl4pHWi4igN7rv",
     sandbox: process.env.NODE_ENV === "development",
+    backendPrefix: "https://ning.kisin.tech/api",
     postChannel: "3370836",
     maxTimeToTry: 10,
     excludedChannels: [
@@ -47,6 +48,7 @@ export interface Environment {
     appID: string,
     token: string,
     sandbox: boolean,
+    backendPrefix: string,
     postChannel: string,
     maxTimeToTry: number,
     excludedChannels: Array<string>,
