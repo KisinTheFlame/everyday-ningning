@@ -47,7 +47,7 @@ function reply(
             if (options.onFailure !== undefined) {
                 options.onFailure();
             }
-            if (options.shouldRetry) {
+            if (options.shouldRetry === undefined || options.shouldRetry) {
                 const timeToTry = options.timeToTry !== undefined ? options.timeToTry : environment.maxTimeToTry;
                 if (timeToTry > 0) {
                     reply(userMessage, message, {
@@ -102,7 +102,7 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) =
         reply(
             userMessage,
             {
-                content: `${atUser(userMessage)} 也不知道你想说啥-_-|||让宁宁查询下你闲的程度试试}`
+                content: `${atUser(userMessage)} 也不知道你想说啥-_-|||让宁宁查询下你闲的程度试试`
             },
             {}
         );
