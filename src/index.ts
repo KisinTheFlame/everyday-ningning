@@ -4,8 +4,7 @@ import axios from "axios";
 import {environment} from "../config";
 import {atUser, getRandomPhoto} from "./util";
 
-const backendPrefix = "https://ning.kisin.tech/api";
-axios.defaults.baseURL = backendPrefix;
+axios.defaults.baseURL = environment.backendPrefix;
 
 const config = {
     appID: environment.appID,
@@ -99,8 +98,14 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) =
         getRandomPhoto().then(photoInfo => {
             postPhoto(userMessage, photoInfo);
         });
-    } else if (userMessage.content.includes(environment.command.playMusic)) {
-        //
+    } else {
+        reply(
+            userMessage,
+            {
+                content: `${atUser(userMessage)} 也不知道你想说啥-_-|||让宁宁查询下你闲的程度试试}`
+            },
+            {}
+        );
     }
 });
 
