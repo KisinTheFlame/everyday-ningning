@@ -9,23 +9,25 @@ const userSet = new Set<string>();
 
 const replyGreeting = (greeting: string) => {
     return (userMessage: IMessage) => {
-        if(userSet.has(userMessage.author.id)) {
-            reply(
-                userMessage,
-                {
-                    content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
-                },
-                {
-                    onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greeting}.`),
-                    onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greeting}.`)
-                }
-            );
-            return;
+        if(userMessage.author.id !== config.kisinId) {
+            if(userSet.has(userMessage.author.id)) {
+                reply(
+                    userMessage,
+                    {
+                        content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
+                    },
+                    {
+                        onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greeting}.`),
+                        onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greeting}.`)
+                    }
+                );
+                return;
+            }
+            userSet.add(userMessage.author.id);
+            setTimeout(() => {
+                userSet.delete(userMessage.author.id);
+            }, config.greetingColdDown);
         }
-        userSet.add(userMessage.author.id);
-        setTimeout(() => {
-            userSet.delete(userMessage.author.id);
-        }, config.greetingColdDown);
         reply(
             userMessage,
             {
