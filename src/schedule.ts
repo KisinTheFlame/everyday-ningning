@@ -1,6 +1,6 @@
 import * as cron from "node-cron";
 import {getRandomPhoto} from "./util";
-import {config} from "../config";
+import {config} from "./config";
 import {client} from "./environment";
 
 interface Schedule {

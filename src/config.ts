@@ -1,5 +1,18 @@
+export interface Config {
+    appId: string,
+    token: string,
+    mode: string
+    sandbox: boolean,
+    backendPrefix: string,
+    postChannel: string,
+    maxTimeToTry: number,
+    excludedChannels: Array<string>,
+    kisinId: string,
+    greetingColdDown: number,
+}
+
 export const config: Config = {
-    appID: "101996873",
+    appId: "101996873",
     token: "EzS8aRVNyGIXMJMEQNpl4pHWi4igN7rv",
     mode: process.env.NODE_ENV !== undefined ? process.env.NODE_ENV : "development",
     sandbox: process.env.NODE_ENV === "development",
@@ -9,15 +22,6 @@ export const config: Config = {
     excludedChannels: [
         "4432291", // 页友专区
     ],
+    kisinId: "11290273580795802656",
+    greetingColdDown: 43200000,
 };
-
-export interface Config {
-    appID: string,
-    token: string,
-    mode: string
-    sandbox: boolean,
-    backendPrefix: string,
-    postChannel: string,
-    maxTimeToTry: number,
-    excludedChannels: Array<string>,
-}

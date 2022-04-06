@@ -1,5 +1,5 @@
 import {IMessage, MessageToCreate} from "qq-guild-bot";
-import {config} from "../config";
+import {config} from "./config";
 import {client} from "./environment";
 
 interface ReplyOptions {

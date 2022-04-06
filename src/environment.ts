@@ -1,11 +1,11 @@
 import axios from "axios";
-import {config} from "../config";
+import {config} from "./config";
 import {AvailableIntentsEventsEnum, createOpenAPI, createWebsocket} from "qq-guild-bot";
 
 axios.defaults.baseURL = config.backendPrefix;
 
 const botConfig = {
-    appID: config.appID,
+    appID: config.appId,
     token: config.token,
     intents: [AvailableIntentsEventsEnum.AT_MESSAGES],
     sandbox: config.sandbox

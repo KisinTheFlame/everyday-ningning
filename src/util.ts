@@ -1,6 +1,6 @@
 import {IMessage} from "qq-guild-bot";
 import axios from "axios";
-import {config} from "../config";
+import {config} from "./config";
 
 export function getRandomPhoto() {
     return axios

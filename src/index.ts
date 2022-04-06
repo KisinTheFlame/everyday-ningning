@@ -2,8 +2,42 @@ import {AvailableIntentsEventsEnum, IMessage} from "qq-guild-bot";
 import {ws} from "./environment";
 import {Replier, reply} from "./autoreply";
 import {atUser, deciding, getRandomPhoto} from "./util";
-import {config} from "../config";
+import {config} from "./config";
 import {startSchedule} from "./schedule";
+
+const userSet = new Set<string>();
+
+const replyGreeting = (greeting: string) => {
+    return (userMessage: IMessage) => {
+        if(userSet.has(userMessage.author.id)) {
+            reply(
+                userMessage,
+                {
+                    content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
+                },
+                {
+                    onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greeting}.`),
+                    onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greeting}.`)
+                }
+            );
+            return;
+        }
+        userSet.add(userMessage.author.id);
+        setTimeout(() => {
+            userSet.delete(userMessage.author.id);
+        }, config.greetingColdDown);
+        reply(
+            userMessage,
+            {
+                content: `${atUser(userMessage)} ${greeting}`,
+            },
+            {
+                onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${greeting}.`),
+                onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${greeting}.`),
+            }
+        );
+    };
+};
 
 const replier: Replier = {
     whenExcludedChannel: userMessage => {
@@ -39,11 +73,27 @@ const replier: Replier = {
                         },
                         {
                             onSuccess: () => console.log(`Success: ${userMessage.author.username} retrieving ${photoInfo.path}`),
-                            onFailure: () => console.log(`Failure: ${userMessage.author.username} retrieving ${photoInfo.path}`)
+                            onFailure: () => console.log(`Failure: ${userMessage.author.username} retrieving ${photoInfo.path}`),
                         }
                     );
                 });
             }
+        },
+        {
+            commandName: deciding("morning", "早上好"),
+            response: replyGreeting("早安早安~"),
+        },
+        {
+            commandName: deciding("noon", "中午好"),
+            response: replyGreeting("中午好哦~"),
+        },
+        {
+            commandName: deciding("evening", "晚上好"),
+            response: replyGreeting("晚儿好晚儿好~"),
+        },
+        {
+            commandName: deciding("night", "晚安"),
+            response: replyGreeting("晚安噜~"),
         }
     ]
 };
