@@ -1,13 +1,13 @@
 import {IMessage} from "qq-guild-bot";
 import axios from "axios";
-import {environment} from "../config";
+import {config} from "../config";
 
 export function getRandomPhoto() {
     return axios
         .post("/get-random-photo")
         .then((response: { data: { filename: string, description: string, frequency: number } }) => {
             const data = response.data;
-            const path = environment.backendPrefix + "/ning/" + data.filename;
+            const path = config.backendPrefix + "/ning/" + data.filename;
             const description = data.description;
             const frequency = data.frequency;
             return {
@@ -20,4 +20,10 @@ export function getRandomPhoto() {
 
 export function atUser(userMessage: IMessage) {
     return `<@!${userMessage.author.id}>`;
+}
+
+export function deciding<T>(developmentChoice: T, productionChoice: T): (mode: string) => T {
+    return (mode: string) => {
+        return mode === "development" ? developmentChoice : productionChoice;
+    };
 }
