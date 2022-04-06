@@ -96,6 +96,10 @@ const replier: Replier = {
         {
             commandName: deciding("night", "晚安"),
             response: replyGreeting("晚安噜~"),
+        },
+        {
+            commandName: deciding("mua", "mua"),
+            response: replyGreeting("mua~"),
         }
     ]
 };
