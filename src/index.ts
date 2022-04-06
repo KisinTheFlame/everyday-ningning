@@ -127,7 +127,7 @@ function generatePushFunction(greetings: Array<string>) {
     return async () => {
         const {path, description, frequency} = await getRandomPhoto();
         await client.messageApi.postMessage(postChannelId, {
-            content: `${random(greetings)}\n这是本图片第${frequency}\n${description}`,
+            content: `${random(greetings)}\n这是本图片第${frequency}次出现哦！\n${description}`,
             image: path,
         });
     };
