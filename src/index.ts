@@ -7,7 +7,7 @@ import {startSchedule} from "./schedule";
 
 const userSet = new Set<string>();
 
-const replyGreeting = (greeting: string) => {
+const replyPlainGreeting = (greeting: string) => {
     return (userMessage: IMessage) => {
         if(userMessage.author.id !== config.kisinId) {
             if(userSet.has(userMessage.author.id)) {
@@ -83,23 +83,23 @@ const replier: Replier = {
         },
         {
             commandName: deciding("morning", "早上好"),
-            response: replyGreeting("早安早安~"),
+            response: replyPlainGreeting("早安早安~"),
         },
         {
             commandName: deciding("noon", "中午好"),
-            response: replyGreeting("中午好哦~"),
+            response: replyPlainGreeting("中午好哦~"),
         },
         {
             commandName: deciding("evening", "晚上好"),
-            response: replyGreeting("晚儿好晚儿好~"),
+            response: replyPlainGreeting("晚儿好晚儿好~"),
         },
         {
             commandName: deciding("night", "晚安"),
-            response: replyGreeting("晚安噜~"),
+            response: replyPlainGreeting("晚安噜~"),
         },
         {
-            commandName: deciding("mua", "mua"),
-            response: replyGreeting("mua~"),
+            commandName: deciding("mua", `mua`),
+            response: replyPlainGreeting("mua~"),
         }
     ]
 };
