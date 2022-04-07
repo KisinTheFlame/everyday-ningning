@@ -1,7 +1,7 @@
 import {AvailableIntentsEventsEnum, IMessage} from "qq-guild-bot";
 import {ws} from "./environment";
 import {Replier, reply} from "./autoreply";
-import {atUser, deciding, getRandomPhoto, randomOf} from "./util";
+import {announceFrequency, atUser, deciding, getRandomPhoto, randomOf} from "./util";
 import {config} from "./config";
 import {startSchedule} from "./schedule";
 
@@ -74,7 +74,7 @@ const replier: Replier = {
                     reply(
                         userMessage,
                         {
-                            content: `${atUser(userMessage)} 这是本图片第${photoInfo.frequency}次出现哦！\n${photoInfo.description}`,
+                            content: `${atUser(userMessage)} ${announceFrequency(photoInfo.frequency)}\n${photoInfo.description}`,
                             image: photoInfo.path,
                         },
                         {
@@ -87,19 +87,32 @@ const replier: Replier = {
         },
         {
             commandKeyword: deciding("morning", ["早上好", "早安"]),
-            response: replyPlainGreeting(["早安早安~", "早上好捏~"]),
+            response: replyPlainGreeting([
+                "早安早安~",
+                "早上好捏~",
+            ]),
         },
         {
             commandKeyword: deciding("noon", ["中午好", "午安"]),
-            response: replyPlainGreeting(["中午好哦~", "午安！"]),
+            response: replyPlainGreeting([
+                "中午好哦~",
+                "午安！",
+            ]),
         },
         {
             commandKeyword: deciding("evening", "晚上好"),
-            response: replyPlainGreeting(["晚儿好晚儿好~", "好好好，吃过饭了不？"]),
+            response: replyPlainGreeting([
+                "晚儿好晚儿好~",
+                "好好好，吃过饭了不？",
+            ]),
         },
         {
             commandKeyword: deciding("night", ["晚安", "おやすみ", "お休み", "night"]),
-            response: replyPlainGreeting(["晚安噜~", "おやすみなさい～"]),
+            response: replyPlainGreeting([
+                "晚安噜~",
+                "おやすみなさい～",
+                "night night！",
+            ]),
         },
         {
             commandKeyword: deciding(["mua", "亲亲"], ["mua", "亲亲", "亲我"]),
@@ -120,7 +133,7 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) =
         return;
     }
     let responded = false;
-    findMatchingPattern:
+    tryFindingMatchingPattern:
     for (const replyPattern of replier.replyPatterns) {
         const commandKeyword = replyPattern.commandKeyword(config.mode);
         if(typeof commandKeyword === "string") {
@@ -134,7 +147,7 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) =
                 if (userMessage.content.includes(keyword)) {
                     replyPattern.response(userMessage);
                     responded = true;
-                    break findMatchingPattern;
+                    break tryFindingMatchingPattern;
                 }
             }
         }

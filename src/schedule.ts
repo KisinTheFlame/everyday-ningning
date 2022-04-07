@@ -1,5 +1,5 @@
 import * as cron from "node-cron";
-import {getRandomPhoto, randomOf} from "./util";
+import {announceFrequency, getRandomPhoto, randomOf} from "./util";
 import {config} from "./config";
 import {client} from "./environment";
 
@@ -41,7 +41,7 @@ function generatePushFunction(greetings: Array<string>) {
         await client
             .messageApi
             .postMessage(config.postChannel, {
-                content: `${randomOf(greetings)}\n这是本图片第${frequency}次出现哦！\n${description}`,
+                content: `${randomOf(greetings)}\n${announceFrequency(frequency)}\n${description}`,
                 image: path,
             })
             .then(value => console.log(value))

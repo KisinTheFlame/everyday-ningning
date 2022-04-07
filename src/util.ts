@@ -22,6 +22,10 @@ export function atUser(userMessage: IMessage) {
     return `<@!${userMessage.author.id}>`;
 }
 
+export function announceFrequency(frequency: number): string {
+    return `这是本图片第${frequency}次出现哦！`;
+}
+
 export function deciding<T>(developmentChoice: T | Array<T>, productionChoice: T | Array<T>): (mode: string) => T | Array<T> {
     return (mode: string) => {
         return mode === "development" ? developmentChoice : productionChoice;
