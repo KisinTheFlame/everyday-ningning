@@ -98,7 +98,7 @@ const replier: Replier = {
             response: replyPlainGreeting(["晚儿好晚儿好~", "好好好，吃过饭了不？"]),
         },
         {
-            commandKeyword: deciding("night", ["晚安", "おやすみ", "お休み"]),
+            commandKeyword: deciding("night", ["晚安", "おやすみ", "お休み", "night"]),
             response: replyPlainGreeting(["晚安噜~", "おやすみなさい～"]),
         },
         {
