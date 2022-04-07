@@ -5,29 +5,29 @@ import {announceFrequency, atUser, deciding, getRandomPhoto, randomOf} from "./u
 import {config} from "./config";
 import {startSchedule} from "./schedule";
 
-const userSet = new Set<string>();
+// const userSet = new Set<string>();
 
 const replyPlainGreeting = (greetings: Array<string>) => {
     return (userMessage: IMessage) => {
-        if (userMessage.author.id !== config.kisinId) {
-            if (userSet.has(userMessage.author.id)) {
-                reply(
-                    userMessage,
-                    {
-                        content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
-                    },
-                    {
-                        onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greetings}.`),
-                        onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greetings}.`)
-                    }
-                );
-                return;
-            }
-            userSet.add(userMessage.author.id);
-            setTimeout(() => {
-                userSet.delete(userMessage.author.id);
-            }, config.greetingColdDown);
-        }
+        // if (userMessage.author.id !== config.kisinId) {
+        //     if (userSet.has(userMessage.author.id)) {
+        //         reply(
+        //             userMessage,
+        //             {
+        //                 content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
+        //             },
+        //             {
+        //                 onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greetings}.`),
+        //                 onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greetings}.`)
+        //             }
+        //         );
+        //         return;
+        //     }
+        //     userSet.add(userMessage.author.id);
+        //     setTimeout(() => {
+        //         userSet.delete(userMessage.author.id);
+        //     }, config.greetingColdDown);
+        // }
         const greeting = randomOf(greetings);
         reply(
             userMessage,

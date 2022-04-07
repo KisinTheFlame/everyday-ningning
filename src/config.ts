@@ -9,7 +9,6 @@ export interface Config {
     excludedUsers: Array<string>,
     excludedChannels: Array<string>,
     kisinId: string,
-    greetingColdDown: number,
 }
 
 export const config: Config = {
@@ -27,5 +26,4 @@ export const config: Config = {
         "4432291", // 页友专区
     ],
     kisinId: "11290273580795802656",
-    greetingColdDown: 600,
 };
