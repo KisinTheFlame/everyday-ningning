@@ -68,7 +68,7 @@ const replier: Replier = {
     },
     replyPatterns: [
         {
-            commandName: deciding("photo", "/来点宁宁"),
+            commandKeyword: deciding("photo", "/来点宁宁"),
             response: userMessage => {
                 getRandomPhoto().then(photoInfo => {
                     reply(
@@ -86,23 +86,23 @@ const replier: Replier = {
             }
         },
         {
-            commandName: deciding("morning", "早上好"),
+            commandKeyword: deciding("morning", ["早上好", "早安"]),
             response: replyPlainGreeting(["早安早安~", "早上好捏~"]),
         },
         {
-            commandName: deciding("noon", "中午好"),
+            commandKeyword: deciding("noon", ["中午好", "午安"]),
             response: replyPlainGreeting(["中午好哦~", "午安！"]),
         },
         {
-            commandName: deciding("evening", "晚上好"),
+            commandKeyword: deciding("evening", "晚上好"),
             response: replyPlainGreeting(["晚儿好晚儿好~", "好好好，吃过饭了不？"]),
         },
         {
-            commandName: deciding("night", "晚安"),
+            commandKeyword: deciding("night", ["晚安", "おやすみ", "お休み"]),
             response: replyPlainGreeting(["晚安噜~", "おやすみなさい～"]),
         },
         {
-            commandName: deciding("mua", "mua"),
+            commandKeyword: deciding(["mua", "亲亲"], ["mua", "亲亲", "亲我"]),
             response: replyPlainGreeting(["mua~", "不可以随便mua的说！那……那那那那，mua……"]),
         }
     ]
@@ -120,11 +120,23 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) =
         return;
     }
     let responded = false;
+    findMatchingPattern:
     for (const replyPattern of replier.replyPatterns) {
-        if (userMessage.content.includes(replyPattern.commandName(config.mode))) {
-            replyPattern.response(userMessage);
-            responded = true;
-            break;
+        const commandKeyword = replyPattern.commandKeyword(config.mode);
+        if(typeof commandKeyword === "string") {
+            if (userMessage.content.includes(commandKeyword)) {
+                replyPattern.response(userMessage);
+                responded = true;
+                break;
+            }
+        } else {
+            for (const keyword of commandKeyword) {
+                if (userMessage.content.includes(keyword)) {
+                    replyPattern.response(userMessage);
+                    responded = true;
+                    break findMatchingPattern;
+                }
+            }
         }
     }
     if (!responded) {

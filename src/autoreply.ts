@@ -48,7 +48,7 @@ export function reply(
 type Response = (userMessage: IMessage) => void;
 
 export interface ReplyPattern {
-    commandName: (mode: string) => string,
+    commandKeyword: (mode: string) => string | Array<string>,
     response: Response,
 }
 

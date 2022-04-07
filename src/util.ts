@@ -22,7 +22,7 @@ export function atUser(userMessage: IMessage) {
     return `<@!${userMessage.author.id}>`;
 }
 
-export function deciding<T>(developmentChoice: T, productionChoice: T): (mode: string) => T {
+export function deciding<T>(developmentChoice: T | Array<T>, productionChoice: T | Array<T>): (mode: string) => T | Array<T> {
     return (mode: string) => {
         return mode === "development" ? developmentChoice : productionChoice;
     };
