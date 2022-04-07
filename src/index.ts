@@ -70,7 +70,7 @@ const replier: Replier = {
         {
             commandKeyword: deciding("photosp", "图片搜寻"),
             response: userMessage => {
-                if(userMessage.author.id !== config.kisinId) {
+                if (userMessage.author.id !== config.kisinId) {
                     return;
                 }
                 const args = userMessage.content.split(" ");
@@ -139,14 +139,39 @@ const replier: Replier = {
         },
         {
             commandKeyword: deciding("mother", "妈"),
-            response: replyPlainGreeting(["宝贝儿，妈妈在这里~"]),
+            response: replyPlainGreeting([
+                "宝贝儿，妈妈在这里~",
+                "乖，不哭不哭~你已经很棒了！",
+                "注意休息呀宝贝儿，别累着了~",
+                "要多少钱啊宝贝儿？",
+                "怎么又闯祸啦！没事，我是你妈妈，有什么不敢说的？",
+                "给你买了件新衣服宝贝儿，快试试合不合身~",
+                "不痛不痛，让妈妈抱抱~",
+                "蛋包饭做好了宝贝儿，快去洗手手吧~",
+                "这么大了，还让妈妈哄着睡呢？这孩子~",
+                "哎呀~妈妈给你买了新游戏，快来看看~",
+                "尽力就行啦，你考多少分都是妈妈的骄傲！",
+                "这么累干嘛呀？身体最重要，哎呀，没事！妈妈有钱，大不了妈妈养你一辈子！",
+                "想吃这个吗？要不要多买几个？",
+                "多大了还要妈妈帮你洗澡？哎呦…",
+                "不行！太危险了，你给我回来！",
+                "妈妈只有你了，你出了什么事妈妈也活不下去了！",
+                "多大了还跟妈妈撒娇呢~",
+                "我是你妈，我不疼你谁疼你啊~",
+                "妈妈没别的要求，只要你健健康康的就行啦！",
+                "脸嫩脏啊，快过来，妈妈给你洗洗！",
+                "手好凉，怎么回事？别动，妈给你暖暖！",
+            ]),
         }
     ]
 };
 
-ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) => {
+ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage & { message_reference: { message_id: string } } }) => {
     console.log(event);
     const userMessage = event.msg;
+    if (userMessage.message_reference !== undefined) {
+        return;
+    }
     if (config.excludedUsers.includes(userMessage.author.id)) {
         replier.whenExcludedUser(userMessage);
         return;
@@ -157,24 +182,24 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) =
     }
     let responded = false;
     tryFindingMatchingPattern:
-    for (const replyPattern of replier.replyPatterns) {
-        const commandKeyword = replyPattern.commandKeyword(config.mode);
-        if(typeof commandKeyword === "string") {
-            if (userMessage.content.includes(commandKeyword)) {
-                replyPattern.response(userMessage);
-                responded = true;
-                break;
-            }
-        } else {
-            for (const keyword of commandKeyword) {
-                if (userMessage.content.includes(keyword)) {
+        for (const replyPattern of replier.replyPatterns) {
+            const commandKeyword = replyPattern.commandKeyword(config.mode);
+            if (typeof commandKeyword === "string") {
+                if (userMessage.content.includes(commandKeyword)) {
                     replyPattern.response(userMessage);
                     responded = true;
-                    break tryFindingMatchingPattern;
+                    break;
+                }
+            } else {
+                for (const keyword of commandKeyword) {
+                    if (userMessage.content.includes(keyword)) {
+                        replyPattern.response(userMessage);
+                        responded = true;
+                        break tryFindingMatchingPattern;
+                    }
                 }
             }
         }
-    }
     if (!responded) {
         replier.exception(userMessage);
     }
