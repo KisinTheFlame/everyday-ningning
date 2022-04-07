@@ -28,14 +28,15 @@ const replyPlainGreeting = (greetings: Array<string>) => {
                 userSet.delete(userMessage.author.id);
             }, config.greetingColdDown);
         }
+        const greeting = randomOf(greetings);
         reply(
             userMessage,
             {
-                content: `${atUser(userMessage)} ${greetings}`,
+                content: `${atUser(userMessage)} ${greeting}`,
             },
             {
-                onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${randomOf(greetings)}.`),
-                onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${randomOf(greetings)}.`),
+                onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${greeting}.`),
+                onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${greeting}.`),
             }
         );
     };
