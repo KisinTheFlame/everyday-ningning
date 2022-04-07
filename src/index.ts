@@ -136,6 +136,10 @@ const replier: Replier = {
         {
             commandKeyword: deciding(["mua", "亲亲"], ["mua", "亲亲", "亲我"]),
             response: replyPlainGreeting(["mua~", "不可以随便mua的说！那……那那那那，mua……"]),
+        },
+        {
+            commandKeyword: deciding("mother", "妈"),
+            response: replyPlainGreeting(["宝贝儿，妈妈在这里~"]),
         }
     ]
 };
