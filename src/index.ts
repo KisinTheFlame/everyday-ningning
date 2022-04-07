@@ -1,13 +1,13 @@
 import {AvailableIntentsEventsEnum, IMessage} from "qq-guild-bot";
 import {ws} from "./environment";
 import {Replier, reply} from "./autoreply";
-import {atUser, deciding, getRandomPhoto} from "./util";
+import {atUser, deciding, getRandomPhoto, randomOf} from "./util";
 import {config} from "./config";
 import {startSchedule} from "./schedule";
 
 const userSet = new Set<string>();
 
-const replyPlainGreeting = (greeting: string) => {
+const replyPlainGreeting = (greetings: Array<string>) => {
     return (userMessage: IMessage) => {
         if (userMessage.author.id !== config.kisinId) {
             if (userSet.has(userMessage.author.id)) {
@@ -17,8 +17,8 @@ const replyPlainGreeting = (greeting: string) => {
                         content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
                     },
                     {
-                        onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greeting}.`),
-                        onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greeting}.`)
+                        onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greetings}.`),
+                        onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greetings}.`)
                     }
                 );
                 return;
@@ -31,17 +31,20 @@ const replyPlainGreeting = (greeting: string) => {
         reply(
             userMessage,
             {
-                content: `${atUser(userMessage)} ${greeting}`,
+                content: `${atUser(userMessage)} ${greetings}`,
             },
             {
-                onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${greeting}.`),
-                onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${greeting}.`),
+                onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${randomOf(greetings)}.`),
+                onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${randomOf(greetings)}.`),
             }
         );
     };
 };
 
 const replier: Replier = {
+    whenExcludedUser: () => {
+        return;
+    },
     whenExcludedChannel: userMessage => {
         reply(
             userMessage,
@@ -52,9 +55,6 @@ const replier: Replier = {
                 onSuccess: () => console.log(`Rejected ${userMessage.author.username} in channel ${userMessage.channel_id} for the channel has been excluded`)
             }
         );
-    },
-    whenExcludedUser: () => {
-        return;
     },
     exception: userMessage => {
         reply(
@@ -86,23 +86,23 @@ const replier: Replier = {
         },
         {
             commandName: deciding("morning", "早上好"),
-            response: replyPlainGreeting("早安早安~"),
+            response: replyPlainGreeting(["早安早安~", "早上好捏~"]),
         },
         {
             commandName: deciding("noon", "中午好"),
-            response: replyPlainGreeting("中午好哦~"),
+            response: replyPlainGreeting(["中午好哦~", "午安！"]),
         },
         {
             commandName: deciding("evening", "晚上好"),
-            response: replyPlainGreeting("晚儿好晚儿好~"),
+            response: replyPlainGreeting(["晚儿好晚儿好~", "好好好，吃过饭了不？"]),
         },
         {
             commandName: deciding("night", "晚安"),
-            response: replyPlainGreeting("晚安噜~"),
+            response: replyPlainGreeting(["晚安噜~", "おやすみなさい～"]),
         },
         {
             commandName: deciding("mua", "mua"),
-            response: replyPlainGreeting("mua~"),
+            response: replyPlainGreeting(["mua~", "不可以随便mua的说！那……那那那那，mua……"]),
         }
     ]
 };

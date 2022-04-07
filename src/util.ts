@@ -27,3 +27,7 @@ export function deciding<T>(developmentChoice: T, productionChoice: T): (mode: s
         return mode === "development" ? developmentChoice : productionChoice;
     };
 }
+
+export function randomOf<T>(array: Array<T>): T {
+    return array[Math.floor(Math.random() * array.length)];
+}
