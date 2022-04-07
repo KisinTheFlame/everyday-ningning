@@ -54,6 +54,7 @@ export interface ReplyPattern {
 
 export interface Replier {
     whenExcludedChannel: Response,
+    whenExcludedUser: Response,
     exception: Response,
     replyPatterns: Array<ReplyPattern>,
 }

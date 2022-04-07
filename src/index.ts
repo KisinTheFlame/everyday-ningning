@@ -9,8 +9,8 @@ const userSet = new Set<string>();
 
 const replyPlainGreeting = (greeting: string) => {
     return (userMessage: IMessage) => {
-        if(userMessage.author.id !== config.kisinId) {
-            if(userSet.has(userMessage.author.id)) {
+        if (userMessage.author.id !== config.kisinId) {
+            if (userSet.has(userMessage.author.id)) {
                 reply(
                     userMessage,
                     {
@@ -52,6 +52,9 @@ const replier: Replier = {
                 onSuccess: () => console.log(`Rejected ${userMessage.author.username} in channel ${userMessage.channel_id} for the channel has been excluded`)
             }
         );
+    },
+    whenExcludedUser: () => {
+        return;
     },
     exception: userMessage => {
         reply(
@@ -98,7 +101,7 @@ const replier: Replier = {
             response: replyPlainGreeting("晚安噜~"),
         },
         {
-            commandName: deciding("mua", `mua`),
+            commandName: deciding("mua", "mua"),
             response: replyPlainGreeting("mua~"),
         }
     ]
@@ -107,6 +110,10 @@ const replier: Replier = {
 ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage }) => {
     console.log(event);
     const userMessage = event.msg;
+    if (config.excludedUsers.includes(userMessage.author.id)) {
+        replier.whenExcludedUser(userMessage);
+        return;
+    }
     if (config.excludedChannels.includes(userMessage.channel_id)) {
         replier.whenExcludedChannel(userMessage);
         return;
