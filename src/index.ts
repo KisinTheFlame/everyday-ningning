@@ -68,6 +68,25 @@ const replier: Replier = {
     },
     replyPatterns: [
         {
+            commandKeyword: deciding("photosp", "图片搜寻"),
+            response: userMessage => {
+                if(userMessage.author.id !== config.kisinId) {
+                    return;
+                }
+                const args = userMessage.content.split(" ");
+                const imagePath = config.backendPrefix + "/ning/" + args[2];
+                console.log(imagePath);
+                reply(
+                    userMessage,
+                    {
+                        content: "test photosp",
+                        image: imagePath,
+                    },
+                    {}
+                );
+            }
+        },
+        {
             commandKeyword: deciding("photo", "/来点宁宁"),
             response: userMessage => {
                 getRandomPhoto().then(photoInfo => {
