@@ -181,25 +181,27 @@ ws.on(AvailableIntentsEventsEnum.AT_MESSAGES, async (event: { msg: IMessage & { 
         return;
     }
     let responded = false;
-    tryFindingMatchingPattern:
-        for (const replyPattern of replier.replyPatterns) {
-            const commandKeyword = replyPattern.commandKeyword(config.mode);
-            if (typeof commandKeyword === "string") {
-                if (userMessage.content.includes(commandKeyword)) {
+    for (const replyPattern of replier.replyPatterns) {
+        const commandKeyword = replyPattern.commandKeyword(config.mode);
+        if (typeof commandKeyword === "string") {
+            if (userMessage.content.includes(commandKeyword)) {
+                replyPattern.response(userMessage);
+                responded = true;
+                break;
+            }
+        } else {
+            for (const keyword of commandKeyword) {
+                if (userMessage.content.includes(keyword)) {
                     replyPattern.response(userMessage);
                     responded = true;
                     break;
                 }
-            } else {
-                for (const keyword of commandKeyword) {
-                    if (userMessage.content.includes(keyword)) {
-                        replyPattern.response(userMessage);
-                        responded = true;
-                        break tryFindingMatchingPattern;
-                    }
-                }
             }
         }
+        if (responded) {
+            break;
+        }
+    }
     if (!responded) {
         replier.exception(userMessage);
     }
