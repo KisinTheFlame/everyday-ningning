@@ -68,7 +68,7 @@ const replier: Replier = {
     },
     replyPatterns: [
         {
-            commandKeyword: deciding("photosp", "图片搜寻"),
+            commandKeyword: deciding("search", "图片搜寻"),
             response: userMessage => {
                 if (userMessage.author.id !== config.kisinId) {
                     return;
