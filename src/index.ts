@@ -162,7 +162,46 @@ const replier: Replier = {
                 "脸嫩脏啊，快过来，妈妈给你洗洗！",
                 "手好凉，怎么回事？别动，妈给你暖暖！",
             ]),
-        }
+        },
+        {
+            commandKeyword: () => "今天几号",
+            response: replyPlainGreeting([
+                "十六号喽"
+            ]),
+        },
+        {
+            commandKeyword: () => ["吃薯片吗"],
+            response: replyPlainGreeting([
+                "吃！",
+                "你这么好欺负的吗？"
+            ]),
+        },
+        {
+            commandKeyword: () => ["看", "别的女人"],
+            response: replyPlainGreeting([
+                "哎无所谓！真无所谓！",
+                "看别的女人就别跟我说了",
+                "我知道你在我不在的时候去看了别的女人，没事的，我不会生气的（上膛）",
+            ]),
+        },
+        {
+            commandKeyword: () => "典",
+            response: replyPlainGreeting([
+                "哪里典了！"
+            ]),
+        },
+        {
+            commandKeyword: () => "典中典",
+            response: replyPlainGreeting([
+                "哪里典中典了！"
+            ])
+        },
+        {
+            commandKeyword: () => "急了",
+            response: replyPlainGreeting([
+                "哪里急了！"
+            ]),
+        },
     ]
 };
 
