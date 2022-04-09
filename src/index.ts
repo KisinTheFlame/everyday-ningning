@@ -1,4 +1,4 @@
-import {AvailableIntentsEventsEnum, IMessage} from "qq-guild-bot";
+import {AvailableIntentsEventsEnum, IMessage, MessageToCreate} from "qq-guild-bot";
 import {ws} from "./environment";
 import {Replier, reply} from "./autoreply";
 import {announceFrequency, atUser, deciding, getRandomPhoto, randomOf} from "./util";
@@ -7,33 +7,17 @@ import {startSchedule} from "./schedule";
 
 // const userSet = new Set<string>();
 
-const replyPlainGreeting = (greetings: Array<string>) => {
+const replyPlainGreeting = (greetings: Array<string>, imageUrl?: string) => {
     return (userMessage: IMessage) => {
-        // if (userMessage.author.id !== config.kisinId) {
-        //     if (userSet.has(userMessage.author.id)) {
-        //         reply(
-        //             userMessage,
-        //             {
-        //                 content: `${atUser(userMessage)} <emoji:97>（宁宁对你的讨厌程度好像上升了。）`
-        //             },
-        //             {
-        //                 onSuccess: () => console.log(`Reject: ${userMessage.author.username} responded ${greetings}.`),
-        //                 onFailure: () => console.log(`Rejecting Failure: ${userMessage.author.username} responded ${greetings}.`)
-        //             }
-        //         );
-        //         return;
-        //     }
-        //     userSet.add(userMessage.author.id);
-        //     setTimeout(() => {
-        //         userSet.delete(userMessage.author.id);
-        //     }, config.greetingColdDown);
-        // }
         const greeting = randomOf(greetings);
         reply(
             userMessage,
-            {
-                content: `${atUser(userMessage)} ${greeting}`,
-            },
+            Object.assign<MessageToCreate, MessageToCreate>(
+                {
+                    content: `${atUser(userMessage)} ${greeting}`,
+                },
+                imageUrl === undefined ? {} : {image: imageUrl}
+            ),
             {
                 onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${greeting}.`),
                 onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${greeting}.`),
@@ -84,6 +68,12 @@ const replier: Replier = {
                     },
                     {}
                 );
+            }
+        },
+        {
+            commandKeyword: deciding("ban-channel", "/排除子频道"),
+            response: userMessage => {
+                config.excludedChannels.push(userMessage.channel_id);
             }
         },
         {
@@ -171,23 +161,26 @@ const replier: Replier = {
         },
         {
             commandKeyword: () => ["吃薯片吗"],
-            response: replyPlainGreeting([
-                "吃！",
-                "你这么好欺负的吗？"
-            ]),
+            response: replyPlainGreeting(
+                [
+                    "吃！",
+                    "你这么好欺负的吗？"
+                ],
+                `${config.backendPrefix}/special/chip.jpg`
+            ),
         },
         {
             commandKeyword: () => ["看", "别的女人"],
             response: replyPlainGreeting([
-                "哎无所谓！真无所谓！",
-                "看别的女人就别跟我说了",
+                "哎，无所谓！真无所谓！",
+                "看别的女人就别跟我说了，哼",
                 "我知道你在我不在的时候去看了别的女人，没事的，我不会生气的（上膛）",
             ]),
         },
         {
-            commandKeyword: () => "典",
+            commandKeyword: () => "急了",
             response: replyPlainGreeting([
-                "哪里典了！"
+                "哪里急了！"
             ]),
         },
         {
@@ -197,9 +190,9 @@ const replier: Replier = {
             ])
         },
         {
-            commandKeyword: () => "急了",
+            commandKeyword: () => "典",
             response: replyPlainGreeting([
-                "哪里急了！"
+                "哪里典了！"
             ]),
         },
     ]
