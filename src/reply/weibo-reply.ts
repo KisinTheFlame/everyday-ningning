@@ -40,7 +40,7 @@ function commentsToString(comments: Array<Comment>): string {
 }
 
 export function weiboToString(weibo: Weibo): string {
-    return `SNH48-林忆宁\n${weibo.content}\n${repostToString(weibo.repost)}${weibo.time}\n回复：\n${commentsToString(weibo.comments)}`;
+    return `SNH48-林忆宁\n${weibo.content}\n${repostToString(weibo.repost)}${weibo.time}\n评论区：\n${commentsToString(weibo.comments)}`;
 }
 
 let weiboList: Array<Weibo> = [];
