@@ -4,6 +4,7 @@ export interface Config {
     mode: string
     sandbox: boolean,
     backendPrefix: string,
+    resourcePrefix: string
     postChannel: string,
     maxTimeToTry: number,
     excludedUsers: Array<string>,
@@ -17,6 +18,7 @@ export const config: Config = {
     mode: process.env.NODE_ENV !== undefined ? process.env.NODE_ENV : "development",
     sandbox: process.env.NODE_ENV === "development",
     backendPrefix: "https://ning.kisin.tech/api",
+    resourcePrefix: "https://ning-1304012538.cos.ap-shanghai.myqcloud.com",
     postChannel: "3370836",
     maxTimeToTry: 10,
     excludedUsers: [

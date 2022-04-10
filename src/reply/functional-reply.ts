@@ -13,7 +13,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
                 return;
             }
             const args = userMessage.content.split(" ");
-            const imagePath = config.backendPrefix + "/ning/" + args[2];
+            const imagePath = config.resourcePrefix + "/ning/" + args[2];
             console.log(imagePath);
             reply(
                 userMessage,

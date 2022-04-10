@@ -7,7 +7,7 @@ export function getRandomPhoto() {
         .post("/get-random-photo")
         .then((response: { data: { filename: string, description: string, frequency: number } }) => {
             const data = response.data;
-            const path = config.backendPrefix + "/ning/" + data.filename;
+            const path = config.resourcePrefix + "/ning/" + data.filename;
             const description = data.description;
             const frequency = data.frequency;
             return {
