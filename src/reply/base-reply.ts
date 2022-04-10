@@ -1,6 +1,7 @@
 import {IMessage, MessageToCreate} from "qq-guild-bot";
-import {config} from "./config";
-import {client} from "./environment";
+import {config} from "../config";
+import {client} from "../environment";
+import {atUser, randomOf} from "../util";
 
 interface ReplyOptions {
     onSuccess?: () => void,
@@ -28,6 +29,27 @@ export function reply(
         })
         .catch(reason => {
             console.log(reason);
+            if (reason.code === 304003) { // url not allowed
+                console.log(`Failure: ${message.content} with url not allowed.`);
+                reply(
+                    userMessage,
+                    {
+                        content: "出错了呜呜呜，好像是内容里带了链接的原因。重试一下吧！"
+                    },
+                    {}
+                );
+                return;
+            } else if (reason.code === 2000004) {
+                console.log(`Failure: photo detected sexy: ${message.image}`);
+                reply(
+                    userMessage,
+                    {
+                        content: "出错了呜呜呜，腾子图片审核没通过。重试一下吧！"
+                    },
+                    {}
+                );
+                return;
+            }
             if (options.onFailure !== undefined) {
                 options.onFailure();
             }
@@ -58,3 +80,22 @@ export interface Replier {
     exception: Response,
     replyPatterns: Array<ReplyPattern>,
 }
+
+export const replyPlainGreeting = (greetings: Array<string>, imageUrl?: string) => {
+    return (userMessage: IMessage) => {
+        const greeting = randomOf(greetings);
+        reply(
+            userMessage,
+            Object.assign<MessageToCreate, MessageToCreate>(
+                {
+                    content: `${atUser(userMessage)} ${greeting}`,
+                },
+                imageUrl === undefined ? {} : {image: imageUrl}
+            ),
+            {
+                onSuccess: () => console.log(`Success: ${userMessage.author.username} responded ${greeting}.`),
+                onFailure: () => console.log(`Failure: ${userMessage.author.username} responded ${greeting}.`),
+            }
+        );
+    };
+};
