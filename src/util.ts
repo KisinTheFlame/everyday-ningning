@@ -1,6 +1,7 @@
 import {IMessage} from "qq-guild-bot";
 import axios from "axios";
 import {config} from "./config";
+import * as fs from "fs/promises";
 
 export function getRandomPhoto() {
     return axios
@@ -34,4 +35,9 @@ export function deciding<T>(developmentChoice: T | Array<T>, productionChoice: T
 
 export function randomOf<T>(array: Array<T>): T {
     return array[Math.floor(Math.random() * array.length)];
+}
+
+export async function excludeChannel(channelId: string) {
+    config.excludedChannels.push(channelId);
+    await fs.writeFile("static/excluded-channel.json", JSON.stringify(config.excludedChannels));
 }

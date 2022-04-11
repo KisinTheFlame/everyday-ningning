@@ -1,5 +1,5 @@
 import {reply, ReplyPattern} from "./base-reply";
-import {announceFrequency, atUser, deciding, getRandomPhoto, randomOf} from "../util";
+import {announceFrequency, atUser, deciding, excludeChannel, getRandomPhoto, randomOf} from "../util";
 import {config} from "../config";
 import {getWeiboData, Weibo, weiboToString} from "./weibo-reply";
 
@@ -27,8 +27,8 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
     },
     {
         commandKeyword: deciding("ban-channel", "/排除子频道"),
-        response: userMessage => {
-            config.excludedChannels.push(userMessage.channel_id);
+        response: async userMessage => {
+            await excludeChannel(userMessage.channel_id);
         }
     },
     {

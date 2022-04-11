@@ -1,3 +1,5 @@
+import * as fs from "fs/promises";
+
 export interface Config {
     appId: string,
     token: string,
@@ -12,20 +14,21 @@ export interface Config {
     kisinId: string,
 }
 
+export async function readExcludedChannels(): Promise<Array<string>> {
+    const buffer = await fs.readFile("static/excluded-channel.json");
+    return JSON.parse(buffer.toString());
+}
+
 export const config: Config = {
     appId: "101996873",
     token: "EzS8aRVNyGIXMJMEQNpl4pHWi4igN7rv",
     mode: process.env.NODE_ENV !== undefined ? process.env.NODE_ENV : "development",
     sandbox: process.env.NODE_ENV === "development",
     backendPrefix: "https://ning.kisin.tech/api",
-    resourcePrefix: "https://ning-1304012538.cos.ap-shanghai.myqcloud.com",
+    resourcePrefix: "ning-1304012538.file.myqcloud.com",
     postChannel: "3370836",
     maxTimeToTry: 10,
-    excludedUsers: [
-
-    ],
-    excludedChannels: [
-        "4432291", // 页友专区
-    ],
+    excludedUsers: [],
+    excludedChannels: [],
     kisinId: "11290273580795802656",
 };

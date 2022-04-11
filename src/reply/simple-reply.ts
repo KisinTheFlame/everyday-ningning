@@ -75,7 +75,7 @@ export const simpleReplyPatterns: Array<ReplyPattern> = [
                 "吃！",
                 "你这么好欺负的吗？"
             ],
-            `${config.backendPrefix}/special/chip.jpg`
+            `${config.resourcePrefix}/special/chip.jpg`
         ),
     },
     {
