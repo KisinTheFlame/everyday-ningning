@@ -47,7 +47,7 @@ import {functionalReplyPatterns} from "./reply/functional-reply";
         if (userMessage.message_reference !== undefined) {
             return;
         }
-        if (config.excludedUsers.includes(userMessage.author.id)) {
+        if (config.excludedUsers.has(userMessage.author.id)) {
             replier.whenExcludedUser(userMessage);
             return;
         }

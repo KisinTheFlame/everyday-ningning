@@ -9,7 +9,7 @@ export interface Config {
     resourcePrefix: string
     postChannel: string,
     maxTimeToTry: number,
-    excludedUsers: Array<string>,
+    excludedUsers: Set<string>,
     excludedChannels: Array<string>,
     kisinId: string,
 }
@@ -28,7 +28,7 @@ export const config: Config = {
     resourcePrefix: "https://ning-1304012538.file.myqcloud.com",
     postChannel: "3370836",
     maxTimeToTry: 10,
-    excludedUsers: [],
+    excludedUsers: new Set<string>(),
     excludedChannels: [],
     kisinId: "11290273580795802656",
 };
