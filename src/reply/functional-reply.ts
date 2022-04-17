@@ -4,6 +4,7 @@ import {config} from "../config";
 import {getWeiboData, Weibo, weiboToString} from "./weibo-reply";
 import {client} from "../environment";
 
+const weiboColdDownTime = 60000;
 let weiboColdDown = true;
 
 export const functionalReplyPatterns: Array<ReplyPattern> = [
@@ -120,7 +121,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
                 weiboColdDown = false;
                 setTimeout(() => {
                     weiboColdDown = true;
-                }, 60000);
+                }, weiboColdDownTime);
                 const weiboList = await getWeiboData();
                 const weibo: Weibo = randomOf(weiboList);
                 reply(
@@ -145,7 +146,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
                 reply(
                     userMessage,
                     {
-                        content: `${atUser(userMessage)} 微博冷却中，冷却一分钟哦！`
+                        content: `${atUser(userMessage)} 微博冷却中，冷却${weiboColdDownTime}毫秒哦！`
                     },
                     {}
                 );
