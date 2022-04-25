@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development npx nodemon src/index.ts",
-    "start": "cross-env NODE_ENV=production npx nodemon src/index.ts"
+    "start": "cross-env NODE_ENV=production npx nodemon src/index.ts",
+    "push":  "cross-env NODE_ENV=production npx nodemon src/push.ts"
   },
   "author": "Kisin Wen",
   "license": "UNLICENSED",
