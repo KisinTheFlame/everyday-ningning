@@ -104,4 +104,13 @@ export const simpleReplyPatterns: Array<ReplyPattern> = [
             "哪里典了！"
         ]),
     },
+    {
+        commandKeyword: () => ["我爱你", "520"],
+        response: replyPlainGreeting([
+            "么么么，爱你么么哒",
+            "哎呀，好肉麻哦",
+            "呵呵，真不爱你🤚🤚🤚",
+            "你是？"
+        ])
+    }
 ];

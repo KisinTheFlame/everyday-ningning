@@ -4,8 +4,8 @@ import {config} from "./config";
 const content =
 `
 古戸絵梨花
-
-2022年4月25日17时04分
+日本語ができるきしんのことが大好きなんだ！
+2022年4月25日22时26分
 `.trim();
 
 client.messageApi.postMessage(
@@ -14,5 +14,3 @@ client.messageApi.postMessage(
         content: content
     }
 );
-
-ws.disconnect();
