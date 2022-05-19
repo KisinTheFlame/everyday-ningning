@@ -9,6 +9,24 @@ let weiboColdDown = true;
 
 export const functionalReplyPatterns: Array<ReplyPattern> = [
     {
+        commandKeyword: deciding("push", "推送"),
+        response: userMessage => {
+            if (userMessage.author.id !== config.kisinId) {
+                return;
+            }
+            const content = userMessage.content.replace(/.*?\n/, "");
+            client
+                .messageApi
+                .postMessage(
+                    config.postChannel,
+                    {
+                        content: content
+                    }
+                )
+                .catch(reason => console.log(reason));
+        }
+    },
+    {
         commandKeyword: deciding("search", "图片搜寻"),
         response: userMessage => {
             if (userMessage.author.id !== config.kisinId) {
@@ -59,7 +77,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
         }
     },
     {
-        commandKeyword: deciding("ban-user", "/封禁用户"),
+        commandKeyword: deciding("ban-user", "封印"),
         response: async userMessage => {
             if (userMessage.author.id !== config.kisinId) {
                 reply(
@@ -72,11 +90,19 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
                 return;
             }
             const args = userMessage.content.split(" ");
-            const userId = args[2];
+            const userId = args[2].replace("<@!", "").replace(">", "");
+            const time = parseInt(args[3]);
             config.excludedUsers.add(userId);
             setTimeout(() => {
                 config.excludedUsers.delete(userId);
-            }, 1000 * 60 * 60 * 8);
+            }, 1000 * 60 * time);
+            reply(
+                userMessage,
+                {
+                    content: "この人をご封印するのですか？もはや存じております！"
+                },
+                {}
+            );
         }
     },
     {
