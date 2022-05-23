@@ -2,13 +2,14 @@ import {AvailableIntentsEventsEnum, IMessage} from "qq-guild-bot";
 import {ws} from "./environment";
 import {Replier, reply} from "./reply/base-reply";
 import {atUser} from "./util";
-import {config, readExcludedChannels} from "./config";
+import {config, readExcludedChannels, readExcludedUsers} from "./config";
 import {startSchedule} from "./schedule";
 import {simpleReplyPatterns} from "./reply/simple-reply";
 import {functionalReplyPatterns} from "./reply/functional-reply";
 
 (async () => {
     config.excludedChannels = await readExcludedChannels();
+    (await readExcludedUsers()).forEach((userId) => config.excludedUsers.add(userId));
 
     const replier: Replier = {
         whenExcludedUser: () => {

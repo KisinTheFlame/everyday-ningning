@@ -19,6 +19,11 @@ export async function readExcludedChannels(): Promise<Array<string>> {
     return JSON.parse(buffer.toString());
 }
 
+export async function readExcludedUsers(): Promise<Array<string>> {
+    const buffer = await fs.readFile("static/excluded-user.json");
+    return JSON.parse(buffer.toString());
+}
+
 export const config: Config = {
     appId: "101996873",
     token: "EzS8aRVNyGIXMJMEQNpl4pHWi4igN7rv",
