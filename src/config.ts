@@ -12,6 +12,7 @@ export interface Config {
     excludedUsers: Set<string>,
     excludedChannels: Array<string>,
     kisinId: string,
+    guildId: string,
 }
 
 export async function readExcludedChannels(): Promise<Array<string>> {
@@ -36,4 +37,5 @@ export const config: Config = {
     excludedUsers: new Set<string>(),
     excludedChannels: [],
     kisinId: "11290273580795802656",
+    guildId: "8041557175139994816",
 };

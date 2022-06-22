@@ -61,7 +61,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
             }
             const args = userMessage.content.split(" ");
             const username = args[2];
-            const {data} = await client.guildApi.guildMembers(userMessage.guild_id, {after: "0", limit: 1000});
+            const {data} = await client.guildApi.guildMembers(config.guildId, {after: "0", limit: 1000});
             data.forEach((member) => {
                 if (member.nick === username) {
                     reply(
