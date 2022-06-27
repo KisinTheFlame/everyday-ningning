@@ -3,6 +3,7 @@ import {announceFrequency, atUser, deciding, excludeChannel, getRandomPhoto, ran
 import {config} from "../config";
 import {getWeiboData, Weibo, weiboToString} from "./weibo-reply";
 import {client} from "../environment";
+import axios from "axios";
 
 const weiboColdDownTime = 60000;
 let weiboColdDown = true;
@@ -123,7 +124,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
         }
     },
     {
-        commandKeyword: deciding("photo", "/来点宁宁"),
+        commandKeyword: deciding("photo", "来点宁宁"),
         response: userMessage => {
             getRandomPhoto().then(photoInfo => {
                 reply(
@@ -141,7 +142,7 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
         }
     },
     {
-        commandKeyword: deciding("weibo", "/来点微博"),
+        commandKeyword: deciding("weibo", "来点微博"),
         response: async userMessage => {
             if (weiboColdDown) {
                 weiboColdDown = false;
@@ -177,6 +178,16 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
                     {}
                 );
             }
+        }
+    },
+    {
+        commandKeyword: deciding("pocket", "来点口袋"),
+        response: userMessage => {
+            axios
+                .get(`http://114.215.126.86:8080/pocket/getRandom?channelId=${userMessage.channel_id}`)
+                .then(value => {
+                    console.log(`pocket request from ${userMessage.member.nick} get response code ${value.data.code}`);
+                });
         }
     }
 ];
