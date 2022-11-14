@@ -180,14 +180,30 @@ export const functionalReplyPatterns: Array<ReplyPattern> = [
             }
         }
     },
+    // {
+    //     commandKeyword: deciding("pocket", "来点口袋"),
+    //     response: userMessage => {
+    //         axios
+    //             .get(`http://114.215.126.86:8080/pocket/getRandom?channelId=${userMessage.channel_id}`)
+    //             .then(value => {
+    //                 console.log(`pocket request from ${userMessage.member.nick} get response code ${value.data.code}`);
+    //             });
+    //     }
+    // }
     {
         commandKeyword: deciding("pocket", "来点口袋"),
         response: userMessage => {
             axios
-                .get(`http://114.215.126.86:8080/pocket/getRandom?channelId=${userMessage.channel_id}`)
-                .then(value => {
-                    console.log(`pocket request from ${userMessage.member.nick} get response code ${value.data.code}`);
-                });
+                .get("http://114.215.126.86:8080/pocket/getRandom")
+                .then(value =>
+                    reply(
+                        userMessage,
+                        {
+                            content: value.data.data.replace(/\[.*]/m, "")
+                        },
+                        {}
+                    )
+                );
         }
     }
 ];
