@@ -66,7 +66,7 @@ export function reply(
                     reply(
                         userMessage,
                         {
-                            content: "腾子司马马了。"
+                            content: `${atUser(userMessage)}，斯米马赛，腾子司马马了。`
                         },
                         {
                             shouldRetry: false
