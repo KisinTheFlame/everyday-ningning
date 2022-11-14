@@ -62,6 +62,16 @@ export function reply(
                         shouldRetry: options.shouldRetry,
                         timeToTry: timeToTry - 1
                     });
+                } else {
+                    reply(
+                        userMessage,
+                        {
+                            content: "腾子司马马了。"
+                        },
+                        {
+                            shouldRetry: false
+                        },
+                    );
                 }
             }
         });
